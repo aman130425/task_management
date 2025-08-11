@@ -30,20 +30,6 @@ class AppPages {
   ];
 }
 
-// class AuthMiddleware extends GetMiddleware {
-//   final AuthController _authController = Get.find();
-//
-//   @override
-//   RouteSettings? redirect(String? route) {
-//     final isLoggedIn = _authController.user != null;
-//
-//     if (route == AppRoutes.login || route == AppRoutes.signup) {
-//       return isLoggedIn ? const RouteSettings(name: AppRoutes.home) : null;
-//     } else {
-//       return isLoggedIn ? null : const RouteSettings(name: AppRoutes.login);
-//     }
-//   }
-// }
 class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
