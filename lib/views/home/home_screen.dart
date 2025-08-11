@@ -4,28 +4,55 @@ import '../../controllers/auth_controllers.dart';
 import '../../controllers/task_controllers.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/constants.dart';
+import '../../utils/app_colors.dart';
 import '../widgets/task_titles.dart';
 
 class HomeScreen extends StatelessWidget {
   final TaskController _taskController = Get.find();
+  final AuthController _authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Tasks'),
+        title: Obx(() {
+          final email = _authController.user?.email ?? '';
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(AppConstants.completed),
+              if (email.isNotEmpty)
+                Text(
+                  email,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+            ],
+          );
+        }),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => Get.find<AuthController>().signOut(),
+            icon: const Icon(Icons.logout, color: AppColors.appBarIcon),
+            onPressed: () {
+              Get.defaultDialog(
+                title: AppConstants.logout,
+                middleText: AppConstants.logoutPermissionText,
+                textCancel: AppConstants.cancel,
+                textConfirm: AppConstants.logout,
+                confirmTextColor: AppColors.textOnPrimary,
+                onConfirm: () async {
+                  await _authController.signOut();
+                  // Get.offAllNamed('/login');
+                  Get.toNamed(AppRoutes.login);
+                },
+              );
+            },
           ),
         ],
       ),
       body: Obx(() {
         if (_taskController.tasks.isEmpty) {
-          return const Center(
-            child: Text('No tasks yet. Add your first task!'),
-          );
+          return const Center(child: Text(AppConstants.noDataMessageText));
         }
         return ListView.builder(
           itemCount: _taskController.tasks.length,

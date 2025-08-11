@@ -4,6 +4,7 @@ import '../../controllers/task_controllers.dart';
 import '../../models/task_models.dart';
 import '../../utils/constants.dart';
 import '../widgets/common_text_field.dart';
+import '../../utils/connectivity_service.dart';
 
 class AddTaskScreen extends StatefulWidget {
   @override
@@ -19,20 +20,20 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Task')),
+      appBar: AppBar(title: const Text(AppConstants.addTask)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             CommonTextField(
               controller: _titleController,
-              labelText: 'Title',
+              labelText: AppConstants.title,
               prefixIcon: const Icon(Icons.title),
             ),
             const SizedBox(height: 16),
             CommonTextField(
               controller: _descriptionController,
-              labelText: 'Description',
+              labelText: AppConstants.description,
               maxLines: 3,
               prefixIcon: const Icon(Icons.description),
             ),
@@ -55,7 +56,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 });
               },
               decoration: const InputDecoration(
-                labelText: 'Status',
+                labelText: AppConstants.status,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -63,9 +64,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ElevatedButton(
               onPressed: () async {
                 if (_titleController.text.isEmpty) {
-                  Get.snackbar('Error', 'Title cannot be empty');
+                  Get.snackbar(AppConstants.errorMessage, AppConstants.errorMessageText);
                   return;
                 }
+
+                final online = await Get.find<ConnectivityService>().ensureOnline();
+                if (!online) return;
 
                 final task = Task(
                   title: _titleController.text,

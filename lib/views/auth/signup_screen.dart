@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_management_app/utils/constants.dart';
 
 import '../../controllers/auth_controllers.dart';
 import '../../routes/app_routes.dart';
 import '../widgets/common_text_field.dart';
+import '../../utils/connectivity_service.dart';
 
 class SignupScreen extends StatelessWidget {
   final AuthController _authController = Get.find();
@@ -13,7 +15,10 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(
+        title: const Text(AppConstants.signUp),
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -21,16 +26,19 @@ class SignupScreen extends StatelessWidget {
           children: [
             CommonTextField(
               controller: _emailController,
-              labelText: 'Email',
+              labelText: AppConstants.email,
               keyboardType: TextInputType.emailAddress,
               prefixIcon: const Icon(Icons.email),
+              textInputAction: TextInputAction.next,
+              // onSubmitted: (_) => FocusScope.of(context).nextFocus(),
             ),
             const SizedBox(height: 16),
             CommonTextField(
               controller: _passwordController,
-              labelText: 'Password',
+              labelText: AppConstants.password,
               obscureText: true,
               prefixIcon: const Icon(Icons.lock),
+              textInputAction: TextInputAction.done,
             ),
             const SizedBox(height: 24),
             Obx(
@@ -39,6 +47,8 @@ class SignupScreen extends StatelessWidget {
                   : ElevatedButton(
                       onPressed: () async {
                         try {
+                          final online = await Get.find<ConnectivityService>().ensureOnline();
+                          if (!online) return;
                           await _authController.signUp(
                             _emailController.text.trim(),
                             _passwordController.text.trim(),
@@ -47,15 +57,15 @@ class SignupScreen extends StatelessWidget {
                             Get.offAllNamed('/home');
                           }
                         } catch (e) {
-                          Get.snackbar('Error', e.toString());
+                          Get.snackbar(AppConstants.errorMessage, e.toString());
                         }
                       },
-                      child: const Text('Sign Up'),
+                      child: const Text(AppConstants.signUp),
                     ),
             ),
             TextButton(
               onPressed: () => Get.toNamed(AppRoutes.login),
-              child: const Text('Already have an account? Login'),
+              child: const Text(AppConstants.alreadyHaveAnAccount),
             ),
           ],
         ),
