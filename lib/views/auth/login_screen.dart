@@ -47,7 +47,8 @@ class LoginScreen extends StatelessWidget {
                   : ElevatedButton(
                       onPressed: () async {
                         try {
-                          final online = await Get.find<ConnectivityService>().ensureOnline();
+                          final online = await Get.find<ConnectivityService>()
+                              .ensureOnline();
                           if (!online) return;
                           await _authController.signIn(
                             _emailController.text.trim(),

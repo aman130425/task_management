@@ -15,6 +15,7 @@ class AppBindings extends Bindings {
 
     // Controllers (Eager loading - app start pe initialize)
     Get.put(AuthController());
-    Get.lazyPut<TaskController>(() => TaskController());
+    Get.put(TaskController());
+    // Get.lazyPut<TaskController>(() => TaskController());
   }
 }

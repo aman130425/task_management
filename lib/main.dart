@@ -25,23 +25,51 @@ class MyApp extends StatelessWidget {
       title: 'Task Manager',
       theme: appTheme,
       initialBinding: AppBindings(),
-      home: Root(),
+      initialRoute: AppRoutes.splash,
+      // home: Root(),
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class Root extends StatelessWidget {
+// splash_screen.dart
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.find();
     return Obx(() {
-      if (authController.user != null) {
-        return HomeScreen();
-      } else {
-        return LoginScreen();
+      // Warten, bis Firebase initialisiert ist und der Benutzerstatus bekannt ist
+      if (authController.isLoading.isTrue) {
+        // Annahme: isLoading für die anfängliche Auth-Prüfung
+        return CircularProgressIndicator(); // Oder ein anderes Lade-UI
       }
+      if (authController.user != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Get.offAllNamed(AppRoutes.home);
+        });
+      } else {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Get.offAllNamed(AppRoutes.login);
+        });
+      }
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ); // Platzhalter-UI während der Weiterleitung
     });
   }
 }
+
+// class Root extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     final AuthController authController = Get.find();
+//     return Obx(() {
+//       if (authController.user != null) {
+//         return HomeScreen();
+//       } else {
+//         return LoginScreen();
+//       }
+//     });
+//   }
+// }

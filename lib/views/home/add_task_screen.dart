@@ -64,11 +64,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ElevatedButton(
               onPressed: () async {
                 if (_titleController.text.isEmpty) {
-                  Get.snackbar(AppConstants.errorMessage, AppConstants.errorMessageText);
+                  Get.snackbar(
+                    AppConstants.errorMessage,
+                    AppConstants.errorMessageText,
+                  );
                   return;
                 }
 
-                final online = await Get.find<ConnectivityService>().ensureOnline();
+                final online = await Get.find<ConnectivityService>()
+                    .ensureOnline();
                 if (!online) return;
 
                 final task = Task(
@@ -81,7 +85,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 await _taskController.addTask(task);
                 Get.back();
               },
-              child: const Text('Add Task'),
+              child: const Text(AppConstants.addTask),
             ),
           ],
         ),

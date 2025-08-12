@@ -1,18 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../models/task_models.dart';
 import '../utils/constants.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;  
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final RxBool isLoading = false.obs;
 
   Stream<User?> authStateChanges() {
-  return _auth.authStateChanges();
-
-}
+    return _auth.authStateChanges();
+  }
 
   // Auth methods
   Future<User?> signUpWithEmail(String email, String password) async {
@@ -23,7 +23,7 @@ class FirebaseService {
       );
       return credential.user;
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      // Get.snackbar('Error', e.toString());
       return null;
     }
   }
@@ -34,9 +34,11 @@ class FirebaseService {
         email: email,
         password: password,
       );
+      debugPrint("-------email, password------ $email");
+      debugPrint("-------email, password------9 $password");
       return credential.user;
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      // Get.snackbar('Error', e.toString());
       return null;
     }
   }
@@ -55,9 +57,9 @@ class FirebaseService {
     if (userId.isEmpty) return const Stream.empty();
 
     return _firestore
-        .collection(AppConstants.usersCollection)
+        .collection('users')
         .doc(userId)
-        .collection(AppConstants.tasksCollection)
+        .collection('tasks')
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map(
@@ -72,9 +74,9 @@ class FirebaseService {
     if (userId.isEmpty) return;
 
     await _firestore
-        .collection(AppConstants.usersCollection)
+        .collection('users')
         .doc(userId)
-        .collection(AppConstants.tasksCollection)
+        .collection('tasks')
         .add(task.toMap());
   }
 
@@ -83,9 +85,9 @@ class FirebaseService {
     if (userId.isEmpty || task.id == null) return;
 
     await _firestore
-        .collection(AppConstants.usersCollection)
+        .collection('users')
         .doc(userId)
-        .collection(AppConstants.tasksCollection)
+        .collection('tasks')
         .doc(task.id)
         .update(task.toMap());
   }
@@ -95,9 +97,9 @@ class FirebaseService {
     if (userId.isEmpty) return;
 
     await _firestore
-        .collection(AppConstants.usersCollection)
+        .collection('users')
         .doc(userId)
-        .collection(AppConstants.tasksCollection)
+        .collection('tasks')
         .doc(taskId)
         .delete();
   }

@@ -21,12 +21,9 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(AppConstants.completed),
+              const Text(AppConstants.myTask),
               if (email.isNotEmpty)
-                Text(
-                  email,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                Text(email, style: Theme.of(context).textTheme.bodySmall),
             ],
           );
         }),

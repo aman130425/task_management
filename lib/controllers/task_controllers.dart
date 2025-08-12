@@ -42,11 +42,6 @@ class TaskController extends GetxController {
     tasks.clear();
   }
 
-  // @override
-  // void onClose() {
-  //   _tasksSubscription?.cancel();
-  //   super.onClose();
-  // }
   @override
   void dispose() {
     // TODO: implement dispose
