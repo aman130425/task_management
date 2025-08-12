@@ -55,7 +55,7 @@ class SignupScreen extends StatelessWidget {
                             _passwordController.text.trim(),
                           );
                           if (_authController.user != null) {
-                            Get.toNamed(AppRoutes.home);
+                            Get.offNamed(AppRoutes.home);
                             // Get.offAllNamed('/home');
                           }
                         } catch (e) {
@@ -66,7 +66,7 @@ class SignupScreen extends StatelessWidget {
                     ),
             ),
             TextButton(
-              onPressed: () => Get.toNamed(AppRoutes.login),
+              onPressed: () => Get.offNamed(AppRoutes.login),
               child: const Text(AppConstants.alreadyHaveAnAccount),
             ),
           ],

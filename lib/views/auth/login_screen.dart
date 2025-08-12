@@ -55,7 +55,7 @@ class LoginScreen extends StatelessWidget {
                             _passwordController.text.trim(),
                           );
                           if (_authController.user != null) {
-                            Get.offAllNamed('/home');
+                            Get.offNamed('/home');
                           }
                         } catch (e) {
                           Get.snackbar(AppConstants.errorMessage, e.toString());
@@ -65,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                     ),
             ),
             TextButton(
-              onPressed: () => Get.toNamed(AppRoutes.signup),
+              onPressed: () => Get.offNamed(AppRoutes.signup),
               child: const Text(AppConstants.dontHaveAnAccounttext),
             ),
           ],

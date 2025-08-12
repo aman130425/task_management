@@ -32,10 +32,9 @@ class AuthController extends GetxController {
   }
 
   Future<void> _createUserDocument(User user) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .set({'email': user.email});
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+      'email': user.email,
+    });
   }
 
   Future<void> signIn(String email, String password) async {
@@ -46,6 +45,7 @@ class AuthController extends GetxController {
         _user.value = user;
       }
     } catch (e) {
+      Get.snackbar('Error', e.toString());
       rethrow;
     } finally {
       isLoading.value = false;
