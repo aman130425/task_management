@@ -47,14 +47,16 @@ class SignupScreen extends StatelessWidget {
                   : ElevatedButton(
                       onPressed: () async {
                         try {
-                          final online = await Get.find<ConnectivityService>().ensureOnline();
+                          final online = await Get.find<ConnectivityService>()
+                              .ensureOnline();
                           if (!online) return;
                           await _authController.signUp(
                             _emailController.text.trim(),
                             _passwordController.text.trim(),
                           );
                           if (_authController.user != null) {
-                            Get.offAllNamed('/home');
+                            Get.toNamed(AppRoutes.home);
+                            // Get.offAllNamed('/home');
                           }
                         } catch (e) {
                           Get.snackbar(AppConstants.errorMessage, e.toString());
